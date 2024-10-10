@@ -2,4 +2,4 @@ The first method that I am thinking about is the devision tree which is because 
 
 This is the First deep learning method that we tried in this competition:
 
-#ANN#
+# ANN

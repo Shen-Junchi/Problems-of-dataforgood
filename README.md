@@ -26,6 +26,12 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 # Make sure that the Sheet can be viewed entirely
 ```
+# Load data file 
+```
+wk = pd.read_csv(r"C:\Users\jshen67\Downloads\examples.csv")
+
+wk_copy = wk.copy()
+```
 
 # Dealt with data
 This is how we dealing with data:

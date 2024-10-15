@@ -247,3 +247,5 @@ def comment_analysis_on_q21(comment):
     return(response['message']['content'])
 ```
 
+The next thought is using the highest heat map to find the highest relationships between for each variables 
+Only select few elements to use 

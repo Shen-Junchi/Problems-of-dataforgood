@@ -1,6 +1,32 @@
 The first method that I am thinking about is the devision tree which is because the character is easy to be find 
 
 Here is a record of method that I used in this competiton:
+
+# basic setting for package and instructment:
+Python import package: 
+```
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import KFold, train_test_split
+from sklearn.preprocessing import StandardScaler
+from keras.models import Model
+from keras.layers import Input, Dense, Dropout, LayerNormalization, MultiHeadAttention, GlobalAveragePooling1D
+from keras.callbacks import EarlyStopping
+from keras.utils import to_categorical
+from tensorflow.keras.regularizers import l2
+```
+
+Setting necessary package setting: 
+```
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 黑体
+plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
+# This part is to solve the Chinese character problems
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+# Make sure that the Sheet can be viewed entirely
+```
+
 # Dealt with data
 This is how we dealing with data:
 ```
@@ -122,7 +148,70 @@ print("\nFinal model trained on entire dataset.")`
 ```
 Result = 
 ```
-# ANN
+# ANN - Transfomer
+```
+df_copy = data_clean(df)
+X_train, X_test, y_train, y_test = test_train_data(df_copy)
 
-Here we use two types of ANN, a good example is CNN
+# 准备K-fold交叉验证
+n_splits = 5
+kfold = KFold(n_splits=n_splits, shuffle=True, random_state=42)
+
+# 存储每次fold的训练历史
+histories = []
+
+# 进行K-fold交叉验证
+for fold, (train_index, val_index) in enumerate(kfold.split(X_train)):
+    print(f"Fold {fold + 1}/{n_splits}")
+    
+    X_train_fold, X_val_fold = X_train[train_index], X_train[val_index]
+    y_train_fold, y_val_fold = y_train[train_index], y_train[val_index]
+    
+    model = create_model_transformer((X_train.shape[1], 1))
+    early_stopping = EarlyStopping(monitor='val_loss', patience=5)
+    
+    history = model.fit(X_train_fold, y_train_fold, epochs=100, batch_size=10, verbose=1, callbacks=[early_stopping])
+    
+    histories.append(history)
+
+# 可视化结果
+plt.figure(figsize=(12, 4))
+
+# 绘制训练和验证准确率
+plt.subplot(121)
+for i, history in enumerate(histories):
+    plt.plot(history.history['accuracy'], label=f'Train (Fold {i+1})')
+    plt.plot(history.history['val_accuracy'], label=f'Validation (Fold {i+1})')
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(loc='lower right')
+
+# 绘制训练和验证损失
+plt.subplot(122)
+for i, history in enumerate(histories):
+    plt.plot(history.history['loss'], label=f'Train (Fold {i+1})')
+    plt.plot(history.history['val_loss'], label=f'Validation (Fold {i+1})')
+plt.title('Model Loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(loc='upper right')
+
+plt.tight_layout()
+plt.show()
+
+# 计算并打印平均性能
+val_accuracies = [history.history['val_accuracy'][-1] for history in histories]
+mean_accuracy = np.mean(val_accuracies)
+std_accuracy = np.std(val_accuracies)
+print(f"Mean validation accuracy: {mean_accuracy:.4f} (+/- {std_accuracy:.4f})")
+
+# 在测试集上评估最终模型
+final_model = create_model(X_train.shape[1])
+final_model.fit(X_train, y_train, epochs=100, batch_size=10, verbose=1, callbacks=[EarlyStopping(monitor='val_loss', patience=5)], validation_split=0.2)
+test_loss, test_accuracy = final_model.evaluate(X_test, y_test, verbose=0)
+print(f"Test accuracy: {test_accuracy:.4f}")
+```
+
+Here we use two types of ANN, another good example is CNN
 

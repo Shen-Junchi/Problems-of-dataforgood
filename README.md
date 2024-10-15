@@ -247,5 +247,12 @@ def comment_analysis_on_q21(comment):
     return(response['message']['content'])
 ```
 
+
+To use this prompt, we use 
+```
+wk_copy_q2122 = wk_copy[['q21', 'q22']]
+print(comment_analysis_on_q21(wk_copy_q2122.iloc[0,0]))
+print(comment_analysis_on_q22(wk_copy_q2122.iloc[0,1]))
+```
 The next thought is using the highest heat map to find the highest relationships between for each variables 
 Only select few elements to use 

@@ -288,6 +288,52 @@ for j in range(10):
     results[j].to_csv(r"C:\Users\jshen67\Downloads\output_label_{}.csv".format(j), index=False)
     
 ```
+Then we are going to calculate the average and standard deviation 
+```
+dataframes["df_0"].iloc[1, 1]
+# 获取第一个数据框的第二行第二列的值，也就是label_q21的值
+values_list = []
+data_statistics = dataframes["df_0"].copy()
+# 循环访问
+# for key, value in dataframes.items():
+#     print(key, value.shape)
+
+for key, df in dataframes.items():
+
+    # 获取第二行第二列的值并添加到列表中
+    if df.iloc[1, 0] == "NaN":
+        pass
+
+    else:
+        print("This comment is not empty")
+        print(
+            ("the label is {}".format(dataframes["df_0"].iloc[i, 4]))
+        )
+        i = 39
+        # print(df.iloc[i, :])
+        value = df.iloc[i, 1]  # 这里是 label_q21 的
+
+        values_list.append(value)
+        print("_____")
+        if df.iloc[i, 1] == dataframes["df_0"].iloc[i, 4]:
+            print('yes')
+
+        # 输出结果
+        print(values_list)
+        # 计算平均值
+
+        # 打印结果
+        print("The mean is:", sum(values_list) / len(values_list) if values_list else 0)
+
+        print('The standard deviation is:', np.std(values_list))
+        # 在数据框中添加平均值和标准差
+        # data_statistics.iloc[key, "mean"] = sum(values_list) / len(values_list) if values_list else 0
+        # data_statistics.loc[key, "std"] = np.std(values_list)
+
+print(data_statistics)
+```
+
+
 The next thought is using the highest heat map to find the highest relationships between for each variables 
 Only select few elements to use 
 

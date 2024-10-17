@@ -248,43 +248,44 @@ def comment_analysis_on_q22(comment,i):
 
 To use this prompt, we use 
 ```
+# 假设 wk_copy 是已经定义的 DataFrame
 wk_copy_q2122 = wk_copy[['q21', 'q22']]
-wk_copy_q2122.head()
+print(wk_copy_q2122.head())
 print(wk_copy_q2122.shape)
-comment_q21 = []
-label_q21 = []
-comment_q22 = []
-label_q22 = []
 
-for i in range(10):
-    
+results = {}
+
+for j in range(10):
+    results[j] = pd.DataFrame(columns=['comment_q21', 'label_q21', 'comment_q22', 'label_q22'])
+    comment_q21 = []
+    label_q21 = []
+    comment_q22 = []
+    label_q22 = []
+
     for i in range(len(wk_copy_q2122)):
         print('------The {}---q21-------------'.format(i))
-        print( "The label is {}".format(comment_analysis_on_q21(wk_copy_q2122.iloc[i,0], i))) 
-        print("the comment is {}".format(str(wk_copy_q2122.iloc[i,0])))
+        label_21 = comment_analysis_on_q21(wk_copy_q2122.iloc[i, 0], i)
+        print("The label is {}".format(label_21))
+        print("the comment is {}".format(str(wk_copy_q2122.iloc[i, 0])))
+        
         print('------The {}--q22-------------'.format(i))
-        print( "The label is {}".format(comment_analysis_on_q22(wk_copy_q2122.iloc[i,0], i))) 
-        print("the comment is {}".format(str(wk_copy_q2122.iloc[i,1])))
+        label_22 = comment_analysis_on_q22(wk_copy_q2122.iloc[i, 1], i)
+        print("The label is {}".format(label_22))
+        print("the comment is {}".format(str(wk_copy_q2122.iloc[i, 1])))
         print('-------------------------')
 
+        comment_q21.append(wk_copy_q2122.iloc[i, 0])
+        label_q21.append(label_21)
+        comment_q22.append(wk_copy_q2122.iloc[i, 1])
+        label_q22.append(label_22)
 
-        # print( comment_analysis_on_q22(wk_copy_q2122.iloc[i,1], i),str(wk_copy_q2122.iloc[i,1]))
-        comment_q21.append(wk_copy_q2122.iloc[i,0])
-        label_q21.append(comment_analysis_on_q21(wk_copy_q2122.iloc[i,0], i))
-        comment_q22.append(wk_copy_q2122.iloc[i,1])
-        label_q22.append(comment_analysis_on_q22(wk_copy_q2122.iloc[i,1], i))
+    results[j]['comment_q21'] = comment_q21
+    results[j]['label_q21'] = label_q21
+    results[j]['comment_q22'] = comment_q22
+    results[j]['label_q22'] = label_q22
 
-    new_excel = pd.DataFrame(columns=['comment_q21', 'label_q21', 'comment_q22', 'label_q22'])
-    new_excel['comment_q21'] = wk_copy_q2122['q21']
-    new_excel['comment_q22'] = wk_copy_q2122['q22']
-    new_excel['label_q21'] = label_q21
-    new_excel['label_q22'] = label_q22
-
-    new_excel.head()
-    print(new_excel.shape)
-
-# 保存表格
-new_excel.to_csv(r"C:\Users\jshen67\Downloads\output_label.csv", index = False)
+    # 保存表格
+    results[j].to_csv(r"C:\Users\jshen67\Downloads\output_label_{}.csv".format(j), index=False)
     
 ```
 The next thought is using the highest heat map to find the highest relationships between for each variables 

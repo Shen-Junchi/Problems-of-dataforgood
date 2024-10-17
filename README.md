@@ -289,3 +289,73 @@ new_excel.to_csv(r"C:\Users\jshen67\Downloads\output_label.csv", index = False)
 ```
 The next thought is using the highest heat map to find the highest relationships between for each variables 
 Only select few elements to use 
+
+# Another idea to deal with is by collecting the number of each word, like "grief", "us" and using statistics to predict the stage 
+Calcaulte the time that certain word coomes 
+ Python 
+```
+def calculate_unique_word_frequencies(df):
+    frequency = {label: Counter() for label in df['label'].unique()}
+    help_count = 0  # count 
+
+    for index, row in df.iterrows():
+        comments = f"{row['comment_q21']} {row['comment_q22']}".lower()
+        comments = re.sub(r'[^a-zA-Z0-9\u4e00-\u9fa5\s]', '', comments)
+        words = comments.split()
+        
+        # Get how many help exists 
+        help_count += words.count('help')
+        
+        filtered_words = [word for word in words if word not in stop_words]
+        frequency[row['label']].update(filtered_words)
+    
+    return frequency, help_count
+
+# 计算所有不重复字词的频率
+unique_frequencies, help_occurrences = calculate_unique_word_frequencies(df)
+
+
+print(f"'help' 出现的次数: {help_occurrences}")
+
+# 输出每个阶段的不重复词频统计
+# for label, counts in unique_frequencies.items():
+#     print(f"阶段 {label} 的不重复词频统计:")
+#     for word, count in counts.items():
+#         print(f"词 '{word}': {count} 次")
+```
+Or do a bar chart to check each word
+```
+import matplotlib.pyplot as plt
+import pandas as pd
+from collections import Counter
+import re
+
+# 假设 df 是你的 DataFrame
+# 计算某个词的频率
+def calculate_all_word_frequencies(df):
+    frequency = {label: Counter() for label in df['label'].unique()}
+    
+    for index, row in df.iterrows():
+        comments = f"{row['comment_q21']} {row['comment_q22']}".lower()
+        comments = re.sub(r'[^a-zA-Z0-9\u4e00-\u9fa5\s]', '', comments)
+        words = comments.split()
+        frequency[row['label']].update(words)
+    
+    return frequency
+
+# 计算所有字词的频率
+all_frequencies = calculate_all_word_frequencies(df)
+
+# 可视化
+for label, counts in all_frequencies.items():
+    words, counts = zip(*counts.most_common(10))  # 取前10个最常见的词
+    plt.figure(figsize=(10, 5))
+    plt.bar(words, counts)
+    plt.title(f"阶段 {label} 的词频统计")
+    plt.xlabel("词")
+    plt.ylabel("频率")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+```

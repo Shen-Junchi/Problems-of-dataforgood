@@ -15,6 +15,8 @@ from keras.layers import Input, Dense, Dropout, LayerNormalization, MultiHeadAtt
 from keras.callbacks import EarlyStopping
 from keras.utils import to_categorical
 from tensorflow.keras.regularizers import l2
+import ollama
+
 ```
 
 Setting necessary package setting: 

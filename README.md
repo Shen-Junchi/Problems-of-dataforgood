@@ -229,38 +229,63 @@ Here we use two types of ANN, another good example is CNN
 
 For each str question, we definne two functions: 
 ```
-def comment_analysis_on_q22(comment,i):
-    prompt = str(
-        r"""People are in these 5 stages: 1. Overwhelmed, loss of purpose; shock and trauma emotions (isolation) present and challenging to understand. Individuals may struggle to deal with family responsibilities alone. Surviving Child: Feeling disconnected without guidance and attention from grieving adults.2. Experiencing tension between individuals within the family unit; lack of support from family members. Surviving Family Unit: Perception of other family members’ grief experience. Each family member may be at different phases of their grief journey.3. Experiencing grief and learning to process those emotions. Surviving Child: Seeks guidance and acknowledgment of grief; benefit from opportunities to open up and process with kids in similar situations to normalize emotions.4. Renewed experience of grief around anniversaries of loss, holidays, and special moments. Surviving Family Unit: Navigating special moments (sports, school achievements, moments that matter).5. Finding new purpose and goals to begin moving towards Positive Integration. Surviving Family Unit: Connected to a broader community; support system; not the only person/family experiencing loss.6. Healthy point in grief journey; feeling capable to help others and a desire to do so. Surviving Family Unit: Ready to give back to the TAPS community through mentorship programs, volunteering at charity drives & events, etc.According to their answer to this question, tell me their stage number:Please share any additional feedback you have regarding your TAPS Seminar experience.{}Show me only the number"""
-        ).format(comment)
-    response = ollama.chat(model='llama3.1', messages=[
-    {
-        'role': 'user_q22{}'.format(i),
-        'content': prompt
-    },
-    ])
-    return(response['message']['content'])
-
-
 def comment_analysis_on_q21(comment,i):
     prompt = str(
         r"""People are in these 5 stages: 1. Overwhelmed, loss of purpose; shock and trauma emotions (isolation) present and challenging to understand. Individuals may struggle to deal with family responsibilities alone. Surviving Child: Feeling disconnected without guidance and attention from grieving adults.2. Experiencing tension between individuals within the family unit; lack of support from family members. Surviving Family Unit: Perception of other family members’ grief experience. Each family member may be at different phases of their grief journey.3. Experiencing grief and learning to process those emotions. Surviving Child: Seeks guidance and acknowledgment of grief; benefit from opportunities to open up and process with kids in similar situations to normalize emotions.4. Renewed experience of grief around anniversaries of loss, holidays, and special moments. Surviving Family Unit: Navigating special moments (sports, school achievements, moments that matter).5. Finding new purpose and goals to begin moving towards Positive Integration. Surviving Family Unit: Connected to a broader community; support system; not the only person/family experiencing loss.6. Healthy point in grief journey; feeling capable to help others and a desire to do so. Surviving Family Unit: Ready to give back to the TAPS community through mentorship programs, volunteering at charity drives & events, etc.According to their answer to this question, tell me their stage number:Please share with TAPS your favorite moment of the weekend? Did you have a breakthrough moment this weekend you would like to share? .{}Show me only the number"""
         ).format(comment)
-    response = ollama.chat(model='llama3.1', messages=[
-    {
-        'role': 'user_q21{}'.format(i),
-        'content': prompt
-    },
-    ])
-    return(response['message']['content'])
+    response = ollama.chat(model='llama3.1', messages=[{'role': 'user', 'content': prompt}])['message']['content']
+    return(response)    
+
+
+def comment_analysis_on_q22(comment,i):
+    prompt = str(
+        r"""People are in these 5 stages: 1. Overwhelmed, loss of purpose; shock and trauma emotions (isolation) present and challenging to understand. Individuals may struggle to deal with family responsibilities alone. Surviving Child: Feeling disconnected without guidance and attention from grieving adults.2. Experiencing tension between individuals within the family unit; lack of support from family members. Surviving Family Unit: Perception of other family members’ grief experience. Each family member may be at different phases of their grief journey.3. Experiencing grief and learning to process those emotions. Surviving Child: Seeks guidance and acknowledgment of grief; benefit from opportunities to open up and process with kids in similar situations to normalize emotions.4. Renewed experience of grief around anniversaries of loss, holidays, and special moments. Surviving Family Unit: Navigating special moments (sports, school achievements, moments that matter).5. Finding new purpose and goals to begin moving towards Positive Integration. Surviving Family Unit: Connected to a broader community; support system; not the only person/family experiencing loss.6. Healthy point in grief journey; feeling capable to help others and a desire to do so. Surviving Family Unit: Ready to give back to the TAPS community through mentorship programs, volunteering at charity drives & events, etc.According to their answer to this question, tell me their stage number:Please share any additional feedback you have regarding your TAPS Seminar experience.{}Show me only the number"""
+        ).format(comment)
+    response = ollama.chat(model='llama3.1', messages=[{'role': 'user', 'content': prompt}])['message']['content']
+    return(response)
 ```
 
 
 To use this prompt, we use 
 ```
 wk_copy_q2122 = wk_copy[['q21', 'q22']]
-print(comment_analysis_on_q21(wk_copy_q2122.iloc[14,0], 14))
-print(comment_analysis_on_q22(wk_copy_q2122.iloc[14,1], 14))
+wk_copy_q2122.head()
+print(wk_copy_q2122.shape)
+comment_q21 = []
+label_q21 = []
+comment_q22 = []
+label_q22 = []
+
+for i in range(10):
+    
+    for i in range(len(wk_copy_q2122)):
+        print('------The {}---q21-------------'.format(i))
+        print( "The label is {}".format(comment_analysis_on_q21(wk_copy_q2122.iloc[i,0], i))) 
+        print("the comment is {}".format(str(wk_copy_q2122.iloc[i,0])))
+        print('------The {}--q22-------------'.format(i))
+        print( "The label is {}".format(comment_analysis_on_q22(wk_copy_q2122.iloc[i,0], i))) 
+        print("the comment is {}".format(str(wk_copy_q2122.iloc[i,1])))
+        print('-------------------------')
+
+
+        # print( comment_analysis_on_q22(wk_copy_q2122.iloc[i,1], i),str(wk_copy_q2122.iloc[i,1]))
+        comment_q21.append(wk_copy_q2122.iloc[i,0])
+        label_q21.append(comment_analysis_on_q21(wk_copy_q2122.iloc[i,0], i))
+        comment_q22.append(wk_copy_q2122.iloc[i,1])
+        label_q22.append(comment_analysis_on_q22(wk_copy_q2122.iloc[i,1], i))
+
+    new_excel = pd.DataFrame(columns=['comment_q21', 'label_q21', 'comment_q22', 'label_q22'])
+    new_excel['comment_q21'] = wk_copy_q2122['q21']
+    new_excel['comment_q22'] = wk_copy_q2122['q22']
+    new_excel['label_q21'] = label_q21
+    new_excel['label_q22'] = label_q22
+
+    new_excel.head()
+    print(new_excel.shape)
+
+# 保存表格
+new_excel.to_csv(r"C:\Users\jshen67\Downloads\output_label.csv", index = False)
+    
 ```
 The next thought is using the highest heat map to find the highest relationships between for each variables 
 Only select few elements to use 

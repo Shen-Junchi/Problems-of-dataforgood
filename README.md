@@ -156,6 +156,42 @@ print("\nFinal model trained on entire dataset.")`
 ```
 Result = 
 ```
+
+# Random Forest:
+```
+bestdepth = -1
+bestscore =0
+max_depth = 15
+
+
+for i in range(15):
+    clf = tree.DecisionTreeClassifier(random_state=0, max_depth=i+1)
+    #fit the training sets
+    clf.fit(X_train, y_train)
+    #update trainscore
+    trainscore= clf.score(X_train, y_train)
+    #update valscore
+    valscore= clf.score(X_test, y_test)
+    print( 'Depth:', i+1, 'Train Score:', trainscore, 'Validation Score:', valscore)
+    if  valscore > bestscore: 
+        #update bestscore
+        bestscore= valscore
+        #update depth
+        bestdepth= i+1
+
+print('Best depth:', bestdepth, 'Best score:', bestscore)
+```
+Final score:
+Depth: 1 Train Score: 0.4074074074074074 Validation Score: 0.14285714285714285
+Depth: 2 Train Score: 0.6666666666666666 Validation Score: 0.42857142857142855
+Depth: 3 Train Score: 0.9629629629629629 Validation Score: 0.8571428571428571
+Depth: 4 Train Score: 1.0 Validation Score: 0.8571428571428571
+Depth: 5 Train Score: 1.0 Validation Score: 0.8571428571428571
+Depth: 6 Train Score: 1.0 Validation Score: 0.8571428571428571
+Depth: 7 Train Score: 1.0 Validation Score: 0.8571428571428571
+
+Best depth: 3 Best score: 0.8571428571428571
+
 # ANN - Transfomer
 ```
 df_copy = data_clean(df)

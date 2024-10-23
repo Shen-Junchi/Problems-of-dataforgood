@@ -182,14 +182,13 @@ for i in range(15):
 print('Best depth:', bestdepth, 'Best score:', bestscore)
 ```
 Final score:
-Depth: 1 Train Score: 0.4074074074074074 Validation Score: 0.14285714285714285
-Depth: 2 Train Score: 0.6666666666666666 Validation Score: 0.42857142857142855
-Depth: 3 Train Score: 0.9629629629629629 Validation Score: 0.8571428571428571
-Depth: 4 Train Score: 1.0 Validation Score: 0.8571428571428571
-Depth: 5 Train Score: 1.0 Validation Score: 0.8571428571428571
-Depth: 6 Train Score: 1.0 Validation Score: 0.8571428571428571
-Depth: 7 Train Score: 1.0 Validation Score: 0.8571428571428571
-
+Depth: 1 Train Score: 0.4074074074074074 Validation Score: 0.14285714285714285\
+Depth: 2 Train Score: 0.6666666666666666 Validation Score: 0.42857142857142855\
+Depth: 3 Train Score: 0.9629629629629629 Validation Score: 0.8571428571428571\
+Depth: 4 Train Score: 1.0 Validation Score: 0.8571428571428571\
+Depth: 5 Train Score: 1.0 Validation Score: 0.8571428571428571\
+Depth: 6 Train Score: 1.0 Validation Score: 0.8571428571428571\
+Depth: 7 Train Score: 1.0 Validation Score: 0.8571428571428571\
 Best depth: 3 Best score: 0.8571428571428571
 
 # ANN - Transfomer

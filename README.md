@@ -33,19 +33,46 @@ pd.set_option('display.max_rows', None)
 wk = pd.read_csv(r"C:\Users\jshen67\Downloads\examples.csv")
 
 wk_copy = wk.copy()
+df = wk_copy
 ```
 
 # Dealt with data
 This is how we dealing with data:
 ```
-def data_clean(df):
+# def data_clean(df):
+#     df_copy = df.copy()
+#     df_copy.drop(columns=['q21','q22'], axis=0, inplace=True)
+# # we delete the part 'q21' and 'q22', this is the second part of this problem. 
+#     df_copy = pd.get_dummies(df_copy, columns=['q1','q2'])
+#     df_copy = df_copy.astype(int)
+# # Here we do the one-hot encoding. 
+#     print(df_copy.head())
+#     return df_copy
+
+# def test_train_data(df_train):
+#     y = df_train['label']
+# # Then let's do the one-hot encoding for label, y 
+#     X = df_train.drop(columns=['label'], axis=1)
+#     y_adjusted = y - 1
+#     y = to_categorical(y_adjusted, num_classes=6)
+# # Seperate the data 
+#     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+#     sc = StandardScaler()
+#     X_train = sc.fit_transform(X_train)
+#     X_test = sc.transform(X_test)
+    
+#     return X_train, X_test, y_train, y_test
+
+
+
+def clean_data(df):
     df_copy = df.copy()
-    df_copy.drop(columns=['q21','q22'], axis=0, inplace=True)
-# we delete the part 'q21' and 'q22', this is the second part of this problem. 
-    df_copy = pd.get_dummies(df_copy, columns=['q1','q2'])
-    df_copy = df_copy.astype(int)
-# Here we do the one-hot encoding. 
+    df_copy.drop(columns=["Id"], axis=0, inplace=True)
     print(df_copy.head())
+    # this part is to delete the str part
+    df_copy.drop(columns=['q21','q22'], axis=0, inplace=True)
+    df_copy = pd.get_dummies(df_copy, columns=['q1','q2']).astype(int)
     return df_copy
 
 def test_train_data(df_train):
@@ -62,6 +89,9 @@ def test_train_data(df_train):
     X_test = sc.transform(X_test)
     
     return X_train, X_test, y_train, y_test
+
+df_copy = clean_data(df)
+X_train, X_test, y_train, y_test = test_train_data(df_copy)
 ```
 Here in this project what we are doing is we first use the **one-hot encoding method** to achieve the problem that in the questionaire that:
 

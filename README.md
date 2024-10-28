@@ -16,7 +16,9 @@ from keras.callbacks import EarlyStopping
 from keras.utils import to_categorical
 from tensorflow.keras.regularizers import l2
 import ollama
-
+from sklearn import tree
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 ```
 
 Setting necessary package setting: 

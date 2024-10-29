@@ -311,7 +311,70 @@ def comment_analysis_on_q22(comment,i):
     response = ollama.chat(model='llama3.1', messages=[{'role': 'user', 'content': prompt}])['message']['content']
     return(response)
 ```
+In this competition, the coding is:
+```
+Model = [
+  "deepseek-coder-6.7b-instruct",
+  "llava-1.5-7b-hf",
+  "Hermes-3-Llama-3.1-70B",
+  "Hermes-2-Pro-Mistral-7B",
+  "neural-chat-7b-v3-3",
+  "Hermes-3-Llama-3.1-8B",
+  "Hermes-2-Pro-Llama-3-8B"
+]
 
+def comment_analysis_on_q21_PredictionGuard(comment,i):
+    prompt = str(
+        r"""People are in these 5 stages: 1. Overwhelmed, loss of purpose; shock and trauma emotions (isolation) present and challenging to understand. Individuals may struggle to deal with family responsibilities alone. Surviving Child: Feeling disconnected without guidance and attention from grieving adults.2. Experiencing tension between individuals within the family unit; lack of support from family members. Surviving Family Unit: Perception of other family members’ grief experience. Each family member may be at different phases of their grief journey.3. Experiencing grief and learning to process those emotions. Surviving Child: Seeks guidance and acknowledgment of grief; benefit from opportunities to open up and process with kids in similar situations to normalize emotions.4. Renewed experience of grief around anniversaries of loss, holidays, and special moments. Surviving Family Unit: Navigating special moments (sports, school achievements, moments that matter).5. Finding new purpose and goals to begin moving towards Positive Integration. Surviving Family Unit: Connected to a broader community; support system; not the only person/family experiencing loss.6. Healthy point in grief journey; feeling capable to help others and a desire to do so. Surviving Family Unit: Ready to give back to the TAPS community through mentorship programs, volunteering at charity drives & events, etc.According to their answer to this question, tell me their stage number:Please share with TAPS your favorite moment of the weekend? Did you have a breakthrough moment this weekend you would like to share? .{}Show me only the number()
+
+        Output 
+        ````
+        label:()
+        ```
+        """
+        ).format(comment)
+    messages = [
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ]
+        
+    result = client.chat.completions.create(
+        model="deepseek-coder-6.7b-instruct",
+        messages=messages,
+        max_tokens=1000
+    )
+    return result['choices'][0]['message']['content']
+
+def comment_analysis_on_q22_PredictionGuard(comment,i):
+    prompt = str(
+        r"""People are in these 5 stages: 1. Overwhelmed, loss of purpose; shock and trauma emotions (isolation) present and challenging to understand. Individuals may struggle to deal with family responsibilities alone. Surviving Child: Feeling disconnected without guidance and attention from grieving adults.2. Experiencing tension between individuals within the family unit; lack of support from family members. Surviving Family Unit: Perception of other family members’ grief experience. Each family member may be at different phases of their grief journey.3. Experiencing grief and learning to process those emotions. Surviving Child: Seeks guidance and acknowledgment of grief; benefit from opportunities to open up and process with kids in similar situations to normalize emotions.4. Renewed experience of grief around anniversaries of loss, holidays, and special moments. Surviving Family Unit: Navigating special moments (sports, school achievements, moments that matter).5. Finding new purpose and goals to begin moving towards Positive Integration. Surviving Family Unit: Connected to a broader community; support system; not the only person/family experiencing loss.6. Healthy point in grief journey; feeling capable to help others and a desire to do so. Surviving Family Unit: Ready to give back to the TAPS community through mentorship programs, volunteering at charity drives & events, etc.According to their answer to this question, tell me their stage number:Please share with TAPS your favorite moment of the weekend? Did you have a breakthrough moment this weekend you would like to share? .{}Show me only the number
+        Output 
+        ````
+        label:()
+        ````"""
+        ).format(comment)
+    messages = [
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ]
+        
+    result = client.chat.completions.create(
+        model="deepseek-coder-6.7b-instruct",
+        messages=messages,
+        max_tokens=1000
+    )
+    return result['choices'][0]['message']['content']
+    
+
+
+wk_copy_q2122 = wk_copy[['q21', 'q22']]
+print(wk_copy_q2122.head())
+print(wk_copy_q2122.shape)
+```
 
 To use this prompt, we use 
 ```
